@@ -1,0 +1,50 @@
+User Experience:
+========================
+When the game is opened, the player is prompted for a server's IP and their color.
+Once they connect, they are placed in a box with the other connected players.
+Players can move (wasd or arrow keys) and shoot a projectile. (click the window to determine where to shoot)
+If a player is hit too many times, they die. The could either respawn, or be kicked from the server.
+Max of 4 or 10 players?
+
+
+
+Client Side:
+========================
+Model:
+	*Not really the model for the game, but acts like it. It is a client connected to the server
+	*Needs to be initialized with server IP and maybe player color if customization is desired
+	*When connected to the server, accepts data from controller about what action the player is taking
+	*When the view is rendering the game, it should request the current data of game entities from the Model
+
+View:
+	*When the game is opened, text input for server connection is required
+	*When the model is connected to the server, render the game info on a canvas
+		*current location of game entities and other info can be requested from the model
+		*60 fps? Higher than server's tick rate to improve synchronization
+
+Controller:
+	*Gives the model the info needed to initialize a server connection
+		*If the connection is successful, the view needs to be updated
+	*When connected, tells the model when a movement key is pressed or released
+	*When connected, tells the model when the mouse button is clicked, and the coordinates of the mouse in the window
+
+
+
+Server Side:
+========================
+Main Thread:
+	*Initializes the Client Accepting Thread, and the Game Model Thread
+	*Extra: accept command line input to mess with game settings while running
+
+Client Accepting Thread:
+	*Waits for clients to connect, create a player and a Client Thread for them
+
+Client Thread:
+	*One exists for each connected player
+	*Accepts input from controller indirectly through model
+	*Sends game data to view for rendering
+
+Game Model Thread:
+	*Stores game entities: players, projectiles, etc
+	*Updates entities in physics "ticks"
+		*20 tps?

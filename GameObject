@@ -1,0 +1,14 @@
+public class GameObject {
+
+  private double location;
+  private double velocity;
+  
+  public void updatePosition {
+
+  }
+
+  public boolean collides {
+    return false;
+  }
+
+}

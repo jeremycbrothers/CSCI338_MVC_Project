@@ -1,0 +1,15 @@
+public class GameObject {
+  
+  public void acceptKeyInput {
+
+  }
+
+  public void acceptMouseInput {
+    
+  }
+  
+  public void shootProjectile {
+  
+  }
+
+}

@@ -1,7 +1,5 @@
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 /** .
  * The view is responsible for displaying the information.
@@ -11,7 +9,12 @@ import javax.swing.event.*;
  * @author Tom Bylander
  */
 public class DemoView extends JFrame {
-    /** 
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2902087187738355817L;
+
+	/** 
      * the model of this MVC example 
      */
 	private DemoModel model;
@@ -24,6 +27,7 @@ public class DemoView extends JFrame {
 	/** 
 	 * for displaying a list of colors
 	 */
+	@SuppressWarnings("rawtypes")
 	private JList colorList;
 	
 	/** 
@@ -44,11 +48,12 @@ public class DemoView extends JFrame {
 	private static final Color[] colors = {Color.BLACK, Color.BLUE,
 		Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, 
 		Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.PINK, 
-		Color.RED, Color.WHITE, Color.YELLOW, Color.PURPLE};
+		Color.RED, Color.WHITE, Color.YELLOW, Color.MAGENTA};
 
 	/**
 	 * Create and organize the components of the window.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DemoView(DemoModel model) {
 		super("Illustrate Model-View-Controller");
 		this.model = model;

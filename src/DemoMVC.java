@@ -1,7 +1,4 @@
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 /**
  * This demonstrates the model-view-controller design pattern.

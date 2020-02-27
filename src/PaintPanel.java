@@ -9,7 +9,11 @@ import javax.swing.JPanel;
  * @author Tom Bylander
  */
 public class PaintPanel extends JPanel {
-    /** 
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1670546779056717618L;
+	/** 
      * The model of this MVC example (it stores the points) 
      */
 	private DemoModel model;

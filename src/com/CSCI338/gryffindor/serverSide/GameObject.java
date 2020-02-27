@@ -1,6 +1,6 @@
 package com.CSCI338.gryffindor.serverSide;
 
-public class GameObject {
+public abstract class GameObject implements Tickable{
 
 	private double location;
 	private double velocity;
@@ -12,6 +12,12 @@ public class GameObject {
 	public boolean collides() {
 		//TODO
 		return false;
+	}
+
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

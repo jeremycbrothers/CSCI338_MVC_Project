@@ -1,0 +1,14 @@
+A JFrame is a window and required as a base for a graphical apllication.
+	*components such as JPanels are added using the add method
+
+The Display class which extends a Canvas will have its own thread, I can set that up.
+	*In that thread there will be a loop that renders the game on the canvas, I can also set that up
+	*Drawing stuff on a canvas requires a Graphics object (I like the name g), I will set up the render loop to supply that
+		*g.fillRect(x, y, width, height), or g.setColor(color) are examples of the usage of g
+	*To render, you should use the requestRenderData() method of the ClientModel
+		*This data will have to be parsed into whatever format you want
+
+The Listener interfaces provide methods that take an event as an arguement
+	*Once the listener is installed in a graphics component, you will get an event object when relevant
+		*junk events need to be filtered out, and anything relevant needs to change the Controller's game state
+			and notify the ClientModel

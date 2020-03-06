@@ -25,7 +25,7 @@ public class User implements Runnable{
 		this.clientfd = clientfd;
 		this.server = server;
 		
-		Player player = new Player();
+		Player player = new Player(model);
 		this.model.addGameObject(player);
 	}
 	
@@ -115,6 +115,13 @@ public class User implements Runnable{
 			if(request.equals("Testing 1 ... 2 ... 3")) {
 				out.println("Testing response");
 				shutdownUser();
+				
+			}else if(request.equals("GRD")) {//GRD == Get Render Data
+				out.println(fetchRenderData());
+				
+			}else if(request.substring(0, 3).equals("MCA")) {//MCA == Mouse Clicked At
+				//TODO read mouse location from request
+				
 			}
 			
 		}
@@ -124,8 +131,8 @@ public class User implements Runnable{
 		//TODO
 	}
 	
-	private void fetchRenderData() {
-		//TODO
+	private String fetchRenderData() {
+		return model.getRenderString();
 	}
 	
 	@Override

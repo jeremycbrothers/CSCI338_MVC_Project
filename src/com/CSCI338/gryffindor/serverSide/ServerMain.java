@@ -38,8 +38,8 @@ public class ServerMain {
 	public static Model createModel() {
 		//TODO
 		myPrint("Preparing to create the model...");
-		Model model = new Model();
-		//model.startThread();
+		Model model = new Model(800, 600);
+		model.startThread();
 		
 		return model;
 	}
@@ -59,7 +59,7 @@ public class ServerMain {
 		SERVER.stopServer();
 		SERVER.stopThread();
 		
-		//MODEL.stopThread();
+		MODEL.stopThread();
 		
 		System.exit(status);
 	}

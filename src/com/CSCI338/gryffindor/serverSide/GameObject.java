@@ -5,22 +5,26 @@ public abstract class GameObject implements Tickable{
 	/**
 	 * coords of the center of the object
 	 */
-	int x, y;
+	protected int x, y;
 
 	private int velX, velY;
 	private int radius;
+	private boolean damagable;
 	
-	private Model model;
+	protected Model model;
 	
-	public GameObject(Model model, int radius) {
+	public GameObject(Model model, int x, int y, int radius, boolean isDamagable) {
 		this.model = model;
+		this.x = x;
+		this.y = y;
 		this.radius = radius;
+		this.damagable = isDamagable;
 	}
 	
 	/**
 	 * Simple physics update of position
 	 */
-	public void updatePosition() {
+	protected void updatePosition() {
 		x += velX;
 		y += velY;
 	}
@@ -59,19 +63,9 @@ public abstract class GameObject implements Tickable{
 	
 	@Override
 	public void tick() {
-		
-		classSpecificTicking();
-		
 		updatePosition();
-		
 		forceIntoBounds();
-		
 	}
-	
-	/**
-	 * For subclass specific behaviors
-	 */
-	protected abstract void classSpecificTicking();
 	
 	public void setVelX(int velX) {
 		this.velX = velX;
@@ -80,5 +74,14 @@ public abstract class GameObject implements Tickable{
 	public void setVelY(int velY) {
 		this.velY = velY;
 	}
-
+	
+	public boolean isDamagable() {
+		return damagable;
+	}
+	
+	/**
+	 * Call to properly remove the object from the game
+	 */
+	public abstract void kill();
+	
 }

@@ -13,9 +13,10 @@ public class Player extends GameObject{
 	 * true if the key is pressed
 	 */
 	private boolean[] keysPressed = new boolean[4];
+	private boolean dead = false;
 	
 	public Player(Model model) {
-		super(model, DEFAULTPLAYERRADIUS);
+		super(model, 200, 200, DEFAULTPLAYERRADIUS, true);
 	}
 	
 	/**
@@ -27,18 +28,18 @@ public class Player extends GameObject{
 		//TODO
 	}
 	
-	public void acceptMouseInput() {
-		//TODO
-		
-		shootProjectile();
+	public void acceptMouseInput(int mx, int my) {
+		//TODO calculate projectile angle
+		ServerMain.myPrint("Mouse clicked at (" + mx + " , " + my + ")");
+		shootProjectile(x, y, 4, 8);
 	}
 	
-	private void shootProjectile() {
-		//TODO
+	private void shootProjectile(int x, int y, int velX, int velY) {
+		model.addGameObject(new Projectile(model, x, y, velX, velY));
 	}
 
 	@Override
-	protected void classSpecificTicking() {
+	public void tick() {
 		int newVelX = 0, newVelY = 0;
 
 		if(keysPressed[UP])
@@ -54,6 +55,18 @@ public class Player extends GameObject{
 		setVelX(newVelX);
 		setVelY(newVelY);
 		
+		
+		super.tick();
+	}
+	
+	@Override
+	public void kill() {
+		dead = true;
+		model.removeGameObject(this);
+	}
+	
+	public boolean isDead() {
+		return dead;
 	}
 	
 }

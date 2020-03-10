@@ -93,7 +93,6 @@ public class Server implements Runnable{
 		try {
 			serverfd.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -119,7 +118,6 @@ public class Server implements Runnable{
 					user.startThread();
 					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

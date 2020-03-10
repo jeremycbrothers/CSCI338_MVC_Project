@@ -34,7 +34,7 @@ public class ClientModel {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			running = true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO make exit gracefully
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -57,7 +57,7 @@ public class ClientModel {
 			out = null;
 			clientSocket = null;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO make exit gracefully
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -70,7 +70,7 @@ public class ClientModel {
 	 * @param y
 	 */
 	public void mouseClicked(int x, int y) {
-		//TODO
+		//TODO mouseClicked
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class ClientModel {
 	 * @param key
 	 */
 	public void keyPressed(String key) {
-		//TODO
+		//TODO keyPressed
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class ClientModel {
 	 * @param key
 	 */
 	public void keyReleased(String key) {
-		//TODO
+		//TODO keyReleased
 	}
 	
 	/**
@@ -94,19 +94,26 @@ public class ClientModel {
 	 * @return
 	 */
 	public String requestRenderData() {
-		//TODO
-		return "";
+		return sendMessage("GRD");
 	}
 	
 	private synchronized String sendMessage(String message) {
+		if(!running)
+			return "";
+		
+		System.out.println("Sending message: " + message);
+		
 		out.println(message);
 		String response = "";
 		try {
 			response = in.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO make exit gracefully
 			e.printStackTrace();
 		}
+		
+		System.out.println("Recieved response: " + response);
+		
 		return response;
 	}
 	
@@ -119,7 +126,8 @@ public class ClientModel {
 		ClientModel clientTest = new ClientModel();
 		clientTest.connectToServer("127.0.0.1", Color.black);
 		
-		System.out.print(clientTest.sendMessage("Testing 1 ... 2 ... 3"));
+		clientTest.sendMessage("MCA400,350");
+		clientTest.sendMessage("Testing 1 ... 2 ... 3");
 		
 		clientTest.endConnection();
 	}

@@ -46,7 +46,7 @@ public class Model implements Tickable, Runnable{
 	}
 	
 	public String createRenderData() {
-		//TODO
+		//TODO createRenderData
 		return "";
 	}
 	
@@ -79,7 +79,7 @@ public class Model implements Tickable, Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				System.out.println("TPS is: " + ticks);
+				ServerMain.myPrint("TPS is: " + ticks + ", current GameObjects: " + gameObjects.size());
 				ticks = 0;
 			}
 		}
@@ -108,5 +108,9 @@ public class Model implements Tickable, Runnable{
 	public int getHeight() {
 		return height;
 	}
-
+	
+	public LinkedList<GameObject> getGameObjects(){
+		return gameObjects;
+	}
+	
 }

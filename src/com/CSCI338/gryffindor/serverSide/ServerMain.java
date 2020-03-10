@@ -36,7 +36,6 @@ public class ServerMain {
 	}
 	
 	public static Model createModel() {
-		//TODO
 		myPrint("Preparing to create the model...");
 		Model model = new Model(800, 600);
 		model.startThread();
@@ -45,7 +44,6 @@ public class ServerMain {
 	}
 	
 	public static Server createServer(Model model) {
-		//TODO
 		myPrint("Preparing to create the server...");
 		Server server = new Server(model, MAXPLAYERS);
 		server.startThread();
@@ -54,8 +52,6 @@ public class ServerMain {
 	}
 	
 	public static synchronized void closeAllServerSide(int status) {
-		//TODO
-		
 		SERVER.stopServer();
 		SERVER.stopThread();
 		
@@ -65,10 +61,11 @@ public class ServerMain {
 	}
 	
 	/**
-	 * print with a flush to deal with multi-threaded output
+	 * Print which displays the name of the calling thread
+	 * and flushes just in case due to multiple threads running
 	 */
 	public static void myPrint(String str) {
-		System.out.println(str);
+		System.out.println(Thread.currentThread().getName() + " : " + str);
 		System.out.flush();
 	}
 	

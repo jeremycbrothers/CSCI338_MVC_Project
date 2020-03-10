@@ -20,12 +20,11 @@ public class User implements Runnable{
 	private Player player;
 	
 	public User(Model model, Socket clientfd, Server server) {
-		//TODO
 		this.model = model;
 		this.clientfd = clientfd;
 		this.server = server;
 		
-		Player player = new Player(model);
+		player = new Player(model);
 		this.model.addGameObject(player);
 	}
 	
@@ -48,9 +47,8 @@ public class User implements Runnable{
 		ServerMain.myPrint("Client socket closed");
 		try {
 			clientfd.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		ServerMain.myPrint("Client thread stopped");
@@ -81,20 +79,21 @@ public class User implements Runnable{
 				out.close();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	private synchronized void shutdownUser() {
+		model.removeGameObject(player);
 		stopIOStreams();
 		server.removeUser(this);
 		stopThread();
 	}
 	
 	private void readClientRequest() {
-		//TODO
 		String request = "";
+		String data;
+		String response = "";
 		
 		while(threadRunning) {
 			
@@ -112,6 +111,10 @@ public class User implements Runnable{
 				continue;
 			}
 			
+			
+
+			data = request.substring(3);
+			
 			if(request.equals("Testing 1 ... 2 ... 3")) {
 				out.println("Testing response");
 				shutdownUser();
@@ -121,14 +124,18 @@ public class User implements Runnable{
 				
 			}else if(request.substring(0, 3).equals("MCA")) {//MCA == Mouse Clicked At
 				//TODO read mouse location from request
+				int mx, my;
+				int splitter = data.indexOf(',');
+				mx = Integer.parseInt(data.substring(0, splitter));
+				my = Integer.parseInt(data.substring(splitter + 1));
+				player.acceptMouseInput(mx, my);
+				response = "POP, BANG!";
 				
-			}
+			}//TODO else for key input
+			
+			out.println(response);
 			
 		}
-	}
-	
-	private void passPlayerControls() {
-		//TODO
 	}
 	
 	private String fetchRenderData() {
@@ -137,7 +144,6 @@ public class User implements Runnable{
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		setupIOStreams();
 		readClientRequest();
 	}

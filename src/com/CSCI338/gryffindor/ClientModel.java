@@ -10,6 +10,8 @@ import java.net.UnknownHostException;
 
 public class ClientModel {
 	
+	private static final int PORT = 8082;
+	
 	private boolean running = false;
 	private Socket clientSocket;
 	private PrintWriter out;
@@ -18,21 +20,23 @@ public class ClientModel {
 	/**
 	 * Connect to the specified server.
 	 * Does nothing if client is already running.
-	 * @param IP Server to connect to
+	 * @param ip Server to connect to
 	 * @param color Color of the player
 	 * @throws UnknownHostException When server not found
 	 */
-	public void connectToServer(String IP, Color color) throws UnknownHostException{
-		if(!running) {
-			try {
-				clientSocket = new Socket(IP, 8082);
-				out = new PrintWriter(clientSocket.getOutputStream(), true);
-				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				running = true;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	public void connectToServer(String ip, Color color) throws UnknownHostException{
+		if(running) {
+			return;
+		}
+		try {
+			clientSocket = new Socket(ip, PORT);
+			out = new PrintWriter(clientSocket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			running = true;
+		} catch (IOException e) {
+			// TODO make exit gracefully
+			e.printStackTrace();
+			System.exit(-1);
 		}
 	}
 	
@@ -42,19 +46,23 @@ public class ClientModel {
 	 * Does nothing if client is not running.
 	 */
 	public void endConnection() {
-		if(running) {
-			try {
-				in.close();
-				out.close();
-				clientSocket.close();
-				in = null;
-				out = null;
-				clientSocket = null;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(-1);
-			}
+		if(!running) {
+			return;
+		}
+		
+		sendMessage("BYE");
+		
+		try {
+			in.close();
+			out.close();
+			clientSocket.close();
+			in = null;
+			out = null;
+			clientSocket = null;
+		} catch (IOException e) {
+			// TODO make exit gracefully
+			e.printStackTrace();
+			System.exit(-1);
 		}
 	}
 	
@@ -65,23 +73,25 @@ public class ClientModel {
 	 * @param y
 	 */
 	public void mouseClicked(int x, int y) {
-		//TODO
+		sendMessage("MCA" + x + "," + y);
 	}
 	
 	/**
 	 * Controller calls this when a key is pressed
+	 * Accepts keys: "UP", "DOWN", "LEFT", "RIGHT"
 	 * @param key
 	 */
 	public void keyPressed(String key) {
-		//TODO
+		sendMessage("KEY" + key + "," + true);
 	}
 	
 	/**
 	 * Controller calls this when a key is released
+	 * Accepts keys: "UP", "DOWN", "LEFT", "RIGHT"
 	 * @param key
 	 */
 	public void keyReleased(String key) {
-		//TODO
+		sendMessage("KEY" + key + "," + false);
 	}
 	
 	/**
@@ -89,20 +99,45 @@ public class ClientModel {
 	 * @return
 	 */
 	public String requestRenderData() {
-		//TODO
-		return "";
+		//TODO watch for "DEAD" prepended to data string
+		return sendMessage("GRD");
 	}
 	
-	private String sendMessage(String message) {
+	private synchronized String sendMessage(String message) {
+		if(!running)
+			return "";
+		
+		System.out.println("Sending message: " + message);
+		
 		out.println(message);
 		String response = "";
 		try {
 			response = in.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO make exit gracefully
 			e.printStackTrace();
 		}
+		
+		System.out.println("Recieved response: " + response);
+		
 		return response;
+	}
+	
+	/**
+	 * A main method for testing server connection
+	 * @param args
+	 * @throws UnknownHostException 
+	 */
+	public static void main(String[] args) throws UnknownHostException {
+		ClientModel clientTest = new ClientModel();
+		clientTest.connectToServer("127.0.0.1", Color.black);
+		
+		clientTest.mouseClicked(400, 350);
+		clientTest.keyPressed("UP");
+		clientTest.keyReleased("UP");
+		clientTest.sendMessage("Testing 1 ... 2 ... 3");
+		
+		clientTest.endConnection();
 	}
 	
 }

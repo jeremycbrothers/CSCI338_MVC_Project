@@ -4,13 +4,19 @@ import java.util.LinkedList;
 
 public class Model implements Tickable, Runnable{
 	
+	private String renderString;
+	
 	private Thread thread;
 	private boolean running = false;
 	
 	private LinkedList<GameObject> gameObjects;
+	private int width, height;
 	
-	public Model() {
+	public Model(int width, int height) {
 		gameObjects = new LinkedList<GameObject>();
+		renderString = "";
+		this.width = width;
+		this.height = height;
 	}
 	
 	public synchronized void startThread() {
@@ -18,8 +24,10 @@ public class Model implements Tickable, Runnable{
 			return;
 		}
 		
+		ServerMain.myPrint("Model thread created");
 		running = true;
 		thread = new Thread(this);
+		thread.setName("Model thread");
 		thread.start();
 	}
 	
@@ -27,7 +35,8 @@ public class Model implements Tickable, Runnable{
 		if(!running) {
 			return;
 		}
-		
+
+		ServerMain.myPrint("Model thread stopped");
 		running = false;
 		try {
 			thread.join();
@@ -37,7 +46,7 @@ public class Model implements Tickable, Runnable{
 	}
 	
 	public String createRenderData() {
-		//TODO
+		//TODO createRenderData
 		return "";
 	}
 	
@@ -51,14 +60,59 @@ public class Model implements Tickable, Runnable{
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		long lastTime = System.nanoTime();
+		double ticksPerSecond = 20.0;
+		double ns = 1000000000 / ticksPerSecond;
+		double delta = 0;
+		long timer = System.currentTimeMillis();
+		int ticks = 0;
+		long now;
+		while(running) {
+			now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			while(delta >= 1) {
+				tick();
+				ticks++;
+				delta--;
+			}
+			
+			if(System.currentTimeMillis() - timer > 1000) {
+				if(ServerMain.SHOWTPS)
+					ServerMain.myPrint("TPS is: " + ticks + ", current GameObjects: " + gameObjects.size());
+				
+				timer += 1000;
+				ticks = 0;
+			}
+		}
 		
 	}
 
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
+		
+		for(int i = 0; i < gameObjects.size(); i++) {
+			gameObjects.get(i).tick();
+		}
+		
+		renderString = createRenderData();
 		
 	}
-
+	
+	public String getRenderString() {
+		return renderString;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public LinkedList<GameObject> getGameObjects(){
+		return gameObjects;
+	}
+	
 }

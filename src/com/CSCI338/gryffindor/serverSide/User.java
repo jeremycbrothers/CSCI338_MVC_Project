@@ -84,18 +84,20 @@ public class User implements Runnable{
 	}
 	
 	private synchronized void shutdownUser() {
-		model.removeGameObject(player);
+		player.kill();
 		stopIOStreams();
 		server.removeUser(this);
 		stopThread();
 	}
 	
 	private void readClientRequest() {
-		String request = "";
-		String data;
-		String response = "";
 		
 		while(threadRunning) {
+			
+			String request = "";
+			String requestCode;
+			String data;
+			String response = "";
 			
 			try {
 				
@@ -106,24 +108,21 @@ public class User implements Runnable{
 				request = in.readLine();
 				ServerMain.myPrint("Client request: " + request);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				continue;
 			}
 			
 			
-
+			requestCode = request.substring(0, 3);
 			data = request.substring(3);
 			
-			if(request.equals("Testing 1 ... 2 ... 3")) {
-				out.println("Testing response");
-				shutdownUser();
+			if(request.equals("Testing 1 ... 2 ... 3")) {//Testing, not for actual game use
+				response = "Testing response";
 				
-			}else if(request.equals("GRD")) {//GRD == Get Render Data
-				out.println(fetchRenderData());
+			}else if(requestCode.equals("GRD")) {//GRD == Get Render Data
+				response = fetchRenderData();
 				
-			}else if(request.substring(0, 3).equals("MCA")) {//MCA == Mouse Clicked At
-				//TODO read mouse location from request
+			}else if(requestCode.equals("MCA")) {//MCA == Mouse Clicked At
 				int mx, my;
 				int splitter = data.indexOf(',');
 				mx = Integer.parseInt(data.substring(0, splitter));
@@ -131,7 +130,29 @@ public class User implements Runnable{
 				player.acceptMouseInput(mx, my);
 				response = "POP, BANG!";
 				
-			}//TODO else for key input
+			}else if(requestCode.equals("KEY")) {//A key was pressed or released
+				int splitter = data.indexOf(',');
+				String key = data.substring(0, splitter);
+				boolean isPressed = Boolean.parseBoolean(data.substring(splitter + 1));
+				int keyCode = 0;
+				if(key.equals("UP")) {
+					keyCode = Player.UP;
+				}else if(key.equals("DOWN")) {
+					keyCode = Player.DOWN;
+				}else if(key.equals("LEFT")) {
+					keyCode = Player.LEFT;
+				}else if(key.equals("RIGHT")) {
+					keyCode = Player.RIGHT;
+				}
+				
+				player.acceptKeyInput(keyCode, isPressed);
+				response = key + "=" + keyCode + ", " + isPressed;
+				
+			}else if(requestCode.equals("BYE")) {//Client is closing its connection
+				out.println("Good bye!");
+				shutdownUser();
+				
+			}
 			
 			out.println(response);
 			
@@ -139,7 +160,12 @@ public class User implements Runnable{
 	}
 	
 	private String fetchRenderData() {
-		return model.getRenderString();
+		String data = model.getRenderString();
+		if(player.isDead()) {
+			data = "DEAD" + data;
+		}
+		
+		return data;
 	}
 	
 	@Override

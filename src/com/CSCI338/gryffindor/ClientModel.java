@@ -49,6 +49,9 @@ public class ClientModel {
 		if(!running) {
 			return;
 		}
+		
+		sendMessage("BYE");
+		
 		try {
 			in.close();
 			out.close();
@@ -70,23 +73,25 @@ public class ClientModel {
 	 * @param y
 	 */
 	public void mouseClicked(int x, int y) {
-		//TODO mouseClicked
+		sendMessage("MCA" + x + "," + y);
 	}
 	
 	/**
 	 * Controller calls this when a key is pressed
+	 * Accepts keys: "UP", "DOWN", "LEFT", "RIGHT"
 	 * @param key
 	 */
 	public void keyPressed(String key) {
-		//TODO keyPressed
+		sendMessage("KEY" + key + "," + true);
 	}
 	
 	/**
 	 * Controller calls this when a key is released
+	 * Accepts keys: "UP", "DOWN", "LEFT", "RIGHT"
 	 * @param key
 	 */
 	public void keyReleased(String key) {
-		//TODO keyReleased
+		sendMessage("KEY" + key + "," + false);
 	}
 	
 	/**
@@ -94,6 +99,7 @@ public class ClientModel {
 	 * @return
 	 */
 	public String requestRenderData() {
+		//TODO watch for "DEAD" prepended to data string
 		return sendMessage("GRD");
 	}
 	
@@ -126,7 +132,9 @@ public class ClientModel {
 		ClientModel clientTest = new ClientModel();
 		clientTest.connectToServer("127.0.0.1", Color.black);
 		
-		clientTest.sendMessage("MCA400,350");
+		clientTest.mouseClicked(400, 350);
+		clientTest.keyPressed("UP");
+		clientTest.keyReleased("UP");
 		clientTest.sendMessage("Testing 1 ... 2 ... 3");
 		
 		clientTest.endConnection();

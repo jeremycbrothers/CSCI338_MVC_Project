@@ -3,13 +3,18 @@ package com.CSCI338.gryffindor.serverSide;
 import java.util.LinkedList;
 
 public class Projectile extends GameObject{
-
+	
+	
+	public static final int MAXVELOCITY = 20;
 	private static final int DEFAULTPROJECTILERADIUS = 5;
 	
-	public Projectile(Model model, int x, int y, int velX, int velY) {
+	private GameObject owner;
+	
+	public Projectile(Model model, int x, int y, int velX, int velY, GameObject owner) {
 		super(model, x, y, DEFAULTPROJECTILERADIUS, false);
 		this.setVelX(velX);
 		this.setVelY(velY);
+		this.owner = owner;
 	}
 	
 	@Override
@@ -17,12 +22,9 @@ public class Projectile extends GameObject{
 		updatePosition();
 		
 		//once off screen, projectiles cease to exist
-		if(x < 0 || x > model.getWidth()) {
-			if(y < 0 || y > model.getHeight()) {
-				this.kill();
-				model.removeGameObject(this);
-				return;
-			}
+		if(x < 0 || x > model.getWidth() || y < 0 || y > model.getHeight()) {
+			this.kill();
+			return;
 		}
 		
 		LinkedList<GameObject> list = model.getGameObjects();
@@ -32,6 +34,9 @@ public class Projectile extends GameObject{
 			
 			//no need to check if invincible objects are being shot
 			if(!current.isDamagable())
+				continue;
+			//can't shoot yourself
+			if(current == owner)
 				continue;
 			
 			if(current.collides(this)) {
@@ -45,6 +50,7 @@ public class Projectile extends GameObject{
 	@Override
 	public void kill() {
 		model.removeGameObject(this);
+		ServerMain.myPrint("Projectile removed");
 	}
 
 }

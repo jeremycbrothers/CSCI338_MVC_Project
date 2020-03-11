@@ -3,7 +3,7 @@ package com.CSCI338.gryffindor.serverSide;
 public class Player extends GameObject{
 
 	private static final int DEFAULTPLAYERRADIUS = 50;
-	private static final int MAXPLAYERVELOCITY = 10;
+	private static final int MAXVELOCITY = 10;
 	
 	/**
 	 * indexs for the keysPressed array
@@ -25,17 +25,32 @@ public class Player extends GameObject{
 	 * @param pressed
 	 */
 	public void acceptKeyInput(int key, boolean pressed) {
-		//TODO
+		keysPressed[key] = pressed;
 	}
 	
 	public void acceptMouseInput(int mx, int my) {
-		//TODO calculate projectile angle
 		ServerMain.myPrint("Mouse clicked at (" + mx + " , " + my + ")");
-		shootProjectile(x, y, 4, 8);
+		ServerMain.myPrint("Player is at     (" + x + " , " + y + ")");
+		int xDiff = mx - x;
+		int yDiff = my - y;
+		//TODO fix bug with angle, currently wrong angle
+		//Angle is in radians
+		double angle = Math.atan(yDiff / xDiff);
+		
+		if(xDiff < 0) {
+			angle += Math.PI;
+		}
+		
+		int xVel = (int) (Projectile.MAXVELOCITY * Math.cos(angle));
+		int yVel = (int) (Projectile.MAXVELOCITY * Math.sin(angle));
+		
+		ServerMain.myPrint("Angle is: " + angle + ", xVel is: " + xVel + ", yVel is: " + yVel);
+		
+		shootProjectile(x, y, xVel, yVel);
 	}
 	
 	private void shootProjectile(int x, int y, int velX, int velY) {
-		model.addGameObject(new Projectile(model, x, y, velX, velY));
+		model.addGameObject(new Projectile(model, x, y, velX, velY, this));
 	}
 
 	@Override
@@ -43,14 +58,14 @@ public class Player extends GameObject{
 		int newVelX = 0, newVelY = 0;
 
 		if(keysPressed[UP])
-			newVelY -= MAXPLAYERVELOCITY;
+			newVelY -= MAXVELOCITY;
 		if(keysPressed[DOWN])
-			newVelY += MAXPLAYERVELOCITY;
+			newVelY += MAXVELOCITY;
 		
 		if(keysPressed[RIGHT])
-			newVelX += MAXPLAYERVELOCITY;
+			newVelX += MAXVELOCITY;
 		if(keysPressed[LEFT])
-			newVelX -= MAXPLAYERVELOCITY;
+			newVelX -= MAXVELOCITY;
 		
 		setVelX(newVelX);
 		setVelY(newVelY);
@@ -63,6 +78,7 @@ public class Player extends GameObject{
 	public void kill() {
 		dead = true;
 		model.removeGameObject(this);
+		ServerMain.myPrint("Player removed");
 	}
 	
 	public boolean isDead() {

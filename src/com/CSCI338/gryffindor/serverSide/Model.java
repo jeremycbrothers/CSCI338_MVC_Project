@@ -78,8 +78,10 @@ public class Model implements Tickable, Runnable{
 			}
 			
 			if(System.currentTimeMillis() - timer > 1000) {
+				if(ServerMain.SHOWTPS)
+					ServerMain.myPrint("TPS is: " + ticks + ", current GameObjects: " + gameObjects.size());
+				
 				timer += 1000;
-				ServerMain.myPrint("TPS is: " + ticks + ", current GameObjects: " + gameObjects.size());
 				ticks = 0;
 			}
 		}

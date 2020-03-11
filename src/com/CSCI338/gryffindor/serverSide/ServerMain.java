@@ -6,8 +6,10 @@ public class ServerMain {
 	
 	private static final int MAXPLAYERS = 4;
 	
-	public static Model MODEL;
-	public static Server SERVER;
+	public static boolean SHOWTPS = false;
+	
+	private static Model MODEL;
+	private static Server SERVER;
 	
 	public static void main(String[] args) {
 		
@@ -15,7 +17,7 @@ public class ServerMain {
 		SERVER = createServer(MODEL);
 		
 		Scanner scan = new Scanner(System.in);
-		
+		myPrint("Type 'help' for a list of server commands");
 		
 		
 		while(true) {//command line input listener
@@ -26,10 +28,14 @@ public class ServerMain {
 				scan.close();
 				break;
 				
+			}else if(input.equals("toggleTPS")) {
+				SHOWTPS = !SHOWTPS;
+				
 			}else if(input.equals("help")) {
 				myPrint("Available commands:");
 				myPrint("===================");
-				myPrint("  quit      Gracefully closes the server");
+				myPrint("  quit         Gracefully closes the server");
+				myPrint("  toggleTPS    Stop/start tps messages");
 			}
 		}
 		

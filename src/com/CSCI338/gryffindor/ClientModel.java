@@ -25,6 +25,7 @@ public class ClientModel {
 	 * @throws UnknownHostException When server not found
 	 */
 	public void connectToServer(String ip, Color color) throws UnknownHostException{
+		//TODO set player color
 		if(running) {
 			return;
 		}

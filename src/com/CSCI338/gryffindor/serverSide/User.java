@@ -106,7 +106,11 @@ public class User implements Runnable{
 				}
 				
 				request = in.readLine();
-				ServerMain.myPrint("Client request: " + request);
+				
+				if(ServerMain.LISTCLIENTREQUESTS) {
+					ServerMain.myPrint("Client request: " + request);
+				}
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 				continue;

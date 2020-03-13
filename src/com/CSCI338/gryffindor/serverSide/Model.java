@@ -47,7 +47,7 @@ public class Model implements Tickable, Runnable{
 	
 	public String createRenderData() {
 		//TODO createRenderData
-		return "";
+		return "test render data";
 	}
 	
 	public void addGameObject(GameObject obj) {

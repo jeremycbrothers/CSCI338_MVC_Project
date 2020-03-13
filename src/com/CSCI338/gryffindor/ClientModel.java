@@ -5,7 +5,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class ClientModel {
@@ -23,14 +25,23 @@ public class ClientModel {
 	 * @param ip Server to connect to
 	 * @param color Color of the player
 	 * @throws UnknownHostException When server not found
+	 * @return true if connection successful
 	 */
-	public void connectToServer(String ip, Color color) throws UnknownHostException{
+	public boolean connectToServer(String ip, Color color) {
 		//TODO set player color
 		if(running) {
-			return;
+			return false;
 		}
 		try {
-			clientSocket = new Socket(ip, PORT);
+			
+			try {
+				clientSocket = new Socket(ip, PORT);
+			} catch (ConnectException e1) {
+				clientSocket = null;
+				return false;
+			}
+			
+			
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			running = true;
@@ -39,6 +50,8 @@ public class ClientModel {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+		
+		return true;
 	}
 	
 	/**
@@ -113,7 +126,14 @@ public class ClientModel {
 		out.println(message);
 		String response = "";
 		try {
-			response = in.readLine();
+			
+			try {
+				response = in.readLine();
+			} catch (SocketException e1) {
+				//TODO server closed, tell controller to return to joinMenu
+				
+			}
+			
 		} catch (IOException e) {
 			// TODO make exit gracefully
 			e.printStackTrace();
@@ -129,9 +149,12 @@ public class ClientModel {
 	 * @param args
 	 * @throws UnknownHostException 
 	 */
-	public static void main(String[] args) throws UnknownHostException {
+	public static void main(String[] args) {
 		ClientModel clientTest = new ClientModel();
-		clientTest.connectToServer("127.0.0.1", Color.black);
+		if(!clientTest.connectToServer("127.0.0.1", Color.black)) {
+			System.out.println("Connection failed");
+			return;
+		}
 		
 		clientTest.mouseClicked(400, 350);
 		clientTest.keyPressed("UP");

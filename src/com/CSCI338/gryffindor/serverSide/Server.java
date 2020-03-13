@@ -54,17 +54,9 @@ public class Server implements Runnable{
 	@Override
 	public void run() {
 		startServer();
-		try {
-			acceptUserConnections();
-		} catch (SocketException e) {
-			ServerMain.myPrint("Listener socket closed");
-			
-			for(User user : users) {
-				user.stopThread();
-			}
-			
-			stopThread();
-		}
+		
+		acceptUserConnections();
+		
 	}
 	
 	public synchronized void startServer() {
@@ -103,14 +95,21 @@ public class Server implements Runnable{
 		stopThread();
 	}
 	
-	private void acceptUserConnections() throws SocketException {
+	private void acceptUserConnections() {
 		while(serverRunning) {
 			
 			if(users.size() < maxConnections) {//can accept more players
 				try {
 					ServerMain.myPrint("Server ready for connection...");
 					
-					Socket clientfd = serverfd.accept();
+					Socket clientfd;
+					
+					try {
+						clientfd = serverfd.accept();
+					} catch (SocketException e1) {
+						ServerMain.myPrint("Stopped accepting clients");
+						return;
+					}
 					
 					ServerMain.myPrint("Server accepted client: " + clientfd.getInetAddress());
 					User user = new User(model, clientfd, this);

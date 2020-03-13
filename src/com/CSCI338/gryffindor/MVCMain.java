@@ -8,8 +8,6 @@ public class MVCMain {
 		Controller controller = new Controller(model, view);
 		
 		view.registerListener(controller);
-		
-		view.start();
 	}
 	
 }

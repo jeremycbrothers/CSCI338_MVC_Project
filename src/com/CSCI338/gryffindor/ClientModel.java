@@ -52,6 +52,8 @@ public class ClientModel {
 			controller.returnToJoinMenu();
 		}
 		
+		setColor(color);
+		
 		return true;
 	}
 	
@@ -79,6 +81,14 @@ public class ClientModel {
 			e.printStackTrace();
 			controller.returnToJoinMenu();
 		}
+	}
+	
+	/**
+	 * Used to set the player's color on initialization
+	 * @param color
+	 */
+	private void setColor(Color color) {
+		sendMessage("CLR" + color.getRGB());
 	}
 	
 	/**

@@ -156,6 +156,11 @@ public class User implements Runnable{
 				out.println("Good bye!");
 				shutdownUser();
 				
+			}else if(requestCode.equals("CLR")) {//CLR == Color, used to set color to rgb value
+				int rgb = Integer.parseInt(data);
+				player.setColor(rgb);
+				response = "Thats a pretty color";
+				
 			}
 			
 			out.println(response);

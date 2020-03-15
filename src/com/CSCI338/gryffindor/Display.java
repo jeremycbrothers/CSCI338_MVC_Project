@@ -82,7 +82,7 @@ public class Display extends Canvas implements Runnable{
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		g.setColor(Color.black);
+		g.setColor(new Color(127, 63, 127));
 		g.fillRect(0, 0, View.DIMENSIONS.width, View.DIMENSIONS.height);
 		//////////////
 		{

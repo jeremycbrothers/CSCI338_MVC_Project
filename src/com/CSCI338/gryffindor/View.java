@@ -41,7 +41,7 @@ public class View extends JFrame{
 		getContentPane().removeAll();
 		getContentPane().add(display);
 		pack();
-		display.startThread(controller);
+		display.startThread();
 	}
 	
 	public void switchToJoinMenu() {

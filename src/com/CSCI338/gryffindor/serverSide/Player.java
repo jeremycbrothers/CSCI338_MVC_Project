@@ -1,5 +1,7 @@
 package com.CSCI338.gryffindor.serverSide;
 
+import java.awt.Color;
+
 public class Player extends GameObject{
 
 	private static final int DEFAULTPLAYERRADIUS = 50;
@@ -16,7 +18,7 @@ public class Player extends GameObject{
 	private boolean dead = false;
 	
 	public Player(Model model) {
-		super(model, 200, 200, DEFAULTPLAYERRADIUS, true);
+		super(model, 200, 200, DEFAULTPLAYERRADIUS, true, Color.GREEN);
 	}
 	
 	/**

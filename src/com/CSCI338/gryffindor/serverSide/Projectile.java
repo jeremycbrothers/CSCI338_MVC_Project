@@ -1,5 +1,6 @@
 package com.CSCI338.gryffindor.serverSide;
 
+import java.awt.Color;
 import java.util.LinkedList;
 
 public class Projectile extends GameObject{
@@ -11,7 +12,7 @@ public class Projectile extends GameObject{
 	private GameObject owner;
 	
 	public Projectile(Model model, int x, int y, int velX, int velY, GameObject owner) {
-		super(model, x, y, DEFAULTPROJECTILERADIUS, false);
+		super(model, x, y, DEFAULTPROJECTILERADIUS, false, Color.RED);
 		this.setVelX(velX);
 		this.setVelY(velY);
 		this.owner = owner;

@@ -48,11 +48,10 @@ public class Display extends Canvas implements Runnable{
 		
 	}
 	
-	public synchronized void startThread(Controller controller) {
+	public synchronized void startThread() {
 		if(threadRunning) {
 			return;
 		}
-		init(controller);
 		
 		System.out.println("Display thread created");
 		threadRunning = true;
@@ -76,10 +75,6 @@ public class Display extends Canvas implements Runnable{
 		}
 	}
 	
-	private void init(Controller controller) {
-		//TODO plug in mouse and keyboard listeners
-	}
-	
 	private void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
@@ -91,15 +86,46 @@ public class Display extends Canvas implements Runnable{
 		g.fillRect(0, 0, View.DIMENSIONS.width, View.DIMENSIONS.height);
 		//////////////
 		{
-			//TODO render game here
 			String renderData = model.requestRenderData();
-			System.out.println("Render Data: " + renderData);
+			parseRenderData(g, renderData);
 		}
 		//////////////
 		g.dispose();
 		bs.show();
 	}
-
+	
+	/**
+	 * Render data format is:
+	 * object1:object2:object3 .... etc
+	 * 
+	 * object format is:
+	 * x,y,radius,rgb
+	 * 
+	 * @param g
+	 * @param data
+	 */
+	private void parseRenderData(Graphics g, String data) {
+		if(data.length() == 0)
+			return;
+		
+		String[] gameObjects = data.split(":");
+		
+		String[] gOData;
+		int x, y, radius, rgb;
+		
+		for(String gameObject : gameObjects) {
+			gOData = gameObject.split(",");
+			x = Integer.parseInt(gOData[0]);
+			y = Integer.parseInt(gOData[1]);
+			radius = Integer.parseInt(gOData[2]);
+			rgb = Integer.parseInt(gOData[3]);
+			
+			g.setColor(new Color(rgb));
+			g.fillOval(x + radius, y + radius, 2 * radius, 2 * radius);
+			
+		}
+	}
+	
 	public void registerListener(Controller controller) {
 		// TODO Auto-generated method stub
 		

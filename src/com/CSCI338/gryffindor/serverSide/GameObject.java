@@ -1,5 +1,7 @@
 package com.CSCI338.gryffindor.serverSide;
 
+import java.awt.Color;
+
 public abstract class GameObject implements Tickable{
 	
 	/**
@@ -10,15 +12,17 @@ public abstract class GameObject implements Tickable{
 	private int velX, velY;
 	private int radius;
 	private boolean damagable;
+	private Color color;
 	
 	protected Model model;
 	
-	public GameObject(Model model, int x, int y, int radius, boolean isDamagable) {
+	public GameObject(Model model, int x, int y, int radius, boolean isDamagable, Color color) {
 		this.model = model;
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
 		this.damagable = isDamagable;
+		this.color = color;
 	}
 	
 	/**
@@ -83,5 +87,15 @@ public abstract class GameObject implements Tickable{
 	 * Call to properly remove the object from the game
 	 */
 	public abstract void kill();
+	
+	/**
+	 * Combines data needed to render into a parsable string
+	 * @return
+	 */
+	public String createRenderData() {
+		String data = x + "," + y + "," + radius + "," + color.getRGB();
+		
+		return data;
+	}
 	
 }

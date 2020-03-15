@@ -127,8 +127,8 @@ public class Display extends Canvas implements Runnable{
 	}
 	
 	public void registerListener(Controller controller) {
-		// TODO Auto-generated method stub
-		
+		this.addKeyListener(controller.getKeyReader());
+		this.addMouseListener(controller.getMouseReader());
 	}
 	
 }

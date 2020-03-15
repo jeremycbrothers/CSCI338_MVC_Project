@@ -18,4 +18,9 @@ public class Controller {
 		return joinButtonListener;
 	}
 	
+	public void returnToJoinMenu() {
+		model.endConnection();
+		view.switchToJoinMenu();
+	}
+	
 }

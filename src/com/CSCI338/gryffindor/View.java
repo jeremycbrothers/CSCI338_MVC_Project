@@ -45,6 +45,7 @@ public class View extends JFrame{
 	}
 	
 	public void switchToJoinMenu() {
+		joinMenu.setFeedbackText(null);
 		getContentPane().removeAll();
 		getContentPane().add(joinMenu);
 		pack();

@@ -30,6 +30,7 @@ public class JoinMenu extends JPanel{
 	private JTextField ipField;
 	private JList<String> colorList;
 	private JButton joinButton;
+	private JLabel feedback;
 	
 	public JoinMenu() {
 		setPreferredSize(View.DIMENSIONS);
@@ -54,6 +55,13 @@ public class JoinMenu extends JPanel{
 		
 		joinButton = new JButton("Join!");
 		add(joinButton);
+		
+		feedback = new JLabel();
+		add(feedback);
+	}
+	
+	public void setFeedbackText(String text) {
+		feedback.setText(text);
 	}
 	
 	public String getIPAddress() {

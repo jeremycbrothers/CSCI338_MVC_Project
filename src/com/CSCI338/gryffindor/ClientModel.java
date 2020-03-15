@@ -14,6 +14,8 @@ public class ClientModel {
 	
 	private static final int PORT = 8082;
 	
+	private Controller controller;
+	
 	private boolean running = false;
 	private Socket clientSocket;
 	private PrintWriter out;
@@ -46,9 +48,8 @@ public class ClientModel {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			running = true;
 		} catch (IOException e) {
-			// TODO make exit gracefully
 			e.printStackTrace();
-			System.exit(-1);
+			controller.returnToJoinMenu();
 		}
 		
 		return true;
@@ -73,10 +74,10 @@ public class ClientModel {
 			in = null;
 			out = null;
 			clientSocket = null;
+			running = false;
 		} catch (IOException e) {
-			// TODO make exit gracefully
 			e.printStackTrace();
-			System.exit(-1);
+			controller.returnToJoinMenu();
 		}
 	}
 	
@@ -113,8 +114,16 @@ public class ClientModel {
 	 * @return
 	 */
 	public String requestRenderData() {
-		//TODO watch for "DEAD" prepended to data string
-		return sendMessage("GRD");
+		String response = sendMessage("GRD");
+		
+		if(response.length() >= 4) {
+			if(response.substring(0, 4).equals("DEAD")) {
+				response = response.substring(4);
+				controller.returnToJoinMenu();
+			}
+		}
+		
+		return response;
 	}
 	
 	private synchronized String sendMessage(String message) {
@@ -130,13 +139,13 @@ public class ClientModel {
 			try {
 				response = in.readLine();
 			} catch (SocketException e1) {
-				//TODO server closed, tell controller to return to joinMenu
+				controller.returnToJoinMenu();
 				
 			}
 			
 		} catch (IOException e) {
-			// TODO make exit gracefully
 			e.printStackTrace();
+			controller.returnToJoinMenu();
 		}
 		
 		System.out.println("Recieved response: " + response);
@@ -162,6 +171,10 @@ public class ClientModel {
 		clientTest.sendMessage("Testing 1 ... 2 ... 3");
 		
 		clientTest.endConnection();
+	}
+
+	public void addController(Controller controller) {
+		this.controller = controller;
 	}
 	
 }

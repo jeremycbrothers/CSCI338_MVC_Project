@@ -7,9 +7,8 @@ public class MVCMain {
 		View view = new View(model);
 		Controller controller = new Controller(model, view);
 		
+		model.addController(controller);
 		view.registerListener(controller);
-		
-		view.start();
 	}
 	
 }

@@ -8,6 +8,13 @@ import javax.swing.JButton;
 public class JoinButtonListener implements ActionListener{
 	
 	private JoinMenu joinMenu;
+	private View view;
+	private ClientModel model;
+	
+	public JoinButtonListener(View view, ClientModel model) {
+		this.view = view;
+		this.model = model;
+	}
 	
 	public void setJoinButton(JButton button, JoinMenu menu) {
 		joinMenu = menu;
@@ -16,9 +23,17 @@ public class JoinButtonListener implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Connect to server and start game
-		System.out.println("IP address is: " + joinMenu.getIPAddress());
-		System.out.println("Player color is: " + joinMenu.getPlayerColor());
+		joinMenu.setFeedbackText("Connecting...");
+		boolean connected = model.connectToServer(joinMenu.getIPAddress(), joinMenu.getPlayerColor());
+		
+		if(!connected) {
+			joinMenu.setFeedbackText("Failed to connect to server. Bad IP?");
+			return;
+		}
+
+		joinMenu.setFeedbackText("Connected");
+		view.switchToDisplay();
+		
 		
 	}
 

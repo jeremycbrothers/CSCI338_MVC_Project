@@ -11,11 +11,16 @@ public class Controller {
 		// TODO Auto-generated constructor stub
 		this.model = model;
 		this.view = view;
-		joinButtonListener = new JoinButtonListener();
+		joinButtonListener = new JoinButtonListener(view, model);
 	}
 	
 	public JoinButtonListener getJoinButtonListener() {
 		return joinButtonListener;
+	}
+	
+	public void returnToJoinMenu() {
+		model.endConnection();
+		view.switchToJoinMenu();
 	}
 	
 }

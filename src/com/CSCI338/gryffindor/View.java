@@ -14,15 +14,16 @@ public class View extends JFrame{
 	private Controller controller;
 	
 	private JoinMenu joinMenu;
+	private Display display;
 
 	public View(ClientModel model) {
 		// TODO Auto-generated constructor stub
 		this.model = model;
 		joinMenu = new JoinMenu();
+		display = new Display(model);
 		
 		setTitle("Gryffindor MVC Project");
-		getContentPane().add(joinMenu);
-		pack();
+		switchToJoinMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -33,11 +34,22 @@ public class View extends JFrame{
 		// TODO Plug controller into appropriate GUI components
 		this.controller = controller;
 		joinMenu.registerListener(controller);
+		display.registerListener(controller);
 	}
-
-	public void start() {
-		// TODO Auto-generated method stub
-		
+	
+	public void switchToDisplay() {
+		getContentPane().removeAll();
+		getContentPane().add(display);
+		pack();
+		display.startThread();
+	}
+	
+	public void switchToJoinMenu() {
+		joinMenu.setFeedbackText(null);
+		getContentPane().removeAll();
+		getContentPane().add(joinMenu);
+		pack();
+		display.stopThread();
 	}
 
 }

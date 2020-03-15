@@ -46,8 +46,17 @@ public class Model implements Tickable, Runnable{
 	}
 	
 	public String createRenderData() {
-		//TODO createRenderData
-		return "";
+		String data = "";
+		
+		for(int i = 0; i < gameObjects.size(); i++) {
+			data = data + gameObjects.get(i).createRenderData();
+			
+			if(i < gameObjects.size()-1) {//include a delimeter between objects
+				data = data + ":";
+			}
+		}
+		
+		return data;
 	}
 	
 	public void addGameObject(GameObject obj) {

@@ -7,6 +7,7 @@ public class ServerMain {
 	private static final int MAXPLAYERS = 4;
 	
 	public static boolean SHOWTPS = false;
+	public static boolean LISTCLIENTREQUESTS = false;
 	
 	private static Model MODEL;
 	private static Server SERVER;
@@ -28,14 +29,18 @@ public class ServerMain {
 				scan.close();
 				break;
 				
-			}else if(input.equals("toggleTPS")) {
+			}else if(input.equals("tglTPS")) {
 				SHOWTPS = !SHOWTPS;
+				
+			}else if(input.equals("tglclntrqts")) {
+				LISTCLIENTREQUESTS = !LISTCLIENTREQUESTS;
 				
 			}else if(input.equals("help")) {
 				myPrint("Available commands:");
 				myPrint("===================");
 				myPrint("  quit         Gracefully closes the server");
-				myPrint("  toggleTPS    Stop/start tps messages");
+				myPrint("  tglTPS       Stop/start tps messages");
+				myPrint("  tglclntrqts  Stop/start listing client request messages");
 			}
 		}
 		

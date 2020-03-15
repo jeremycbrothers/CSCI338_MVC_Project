@@ -25,12 +25,12 @@ public class JoinMenu extends JPanel{
 			"Dark Gray", "Gray", "Green", "Light Gray", "Magenta",
 			"Orange", "Pink", "Red", "White", "Yellow"};
 	
-	private boolean currentView = true;
 	private JLabel title;
 	private JLabel ipFieldLabel;
 	private JTextField ipField;
 	private JList<String> colorList;
 	private JButton joinButton;
+	private JLabel feedback;
 	
 	public JoinMenu() {
 		setPreferredSize(View.DIMENSIONS);
@@ -43,17 +43,25 @@ public class JoinMenu extends JPanel{
 		ipFieldLabel = new JLabel("Host IP Address:");
 		add(ipFieldLabel);
 		
-		ipField = new JTextField(15);
+		ipField = new JTextField("127.0.0.1", 15);
 		ipField.setMaximumSize(new Dimension(this.getMaximumSize().width, 30));
 		add(ipField);
 		
 		colorList = new JList<>(COLORNAMES);
 		colorList.setVisibleRowCount(5);
 		colorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		colorList.setSelectedIndex(0);
 		add(colorList);
 		
 		joinButton = new JButton("Join!");
 		add(joinButton);
+		
+		feedback = new JLabel();
+		add(feedback);
+	}
+	
+	public void setFeedbackText(String text) {
+		feedback.setText(text);
 	}
 	
 	public String getIPAddress() {
@@ -65,7 +73,6 @@ public class JoinMenu extends JPanel{
 	}
 	
 	public void registerListener(Controller controller) {
-		// TODO Plug controller into appropriate GUI components. Just the button needs a listener?
 		controller.getJoinButtonListener().setJoinButton(joinButton, this);
 		
 	}

@@ -5,12 +5,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class ClientModel {
 	
 	private static final int PORT = 8082;
+	
+	private Controller controller;
 	
 	private boolean running = false;
 	private Socket clientSocket;
@@ -23,22 +27,32 @@ public class ClientModel {
 	 * @param ip Server to connect to
 	 * @param color Color of the player
 	 * @throws UnknownHostException When server not found
+	 * @return true if connection successful
 	 */
-	public void connectToServer(String ip, Color color) throws UnknownHostException{
+	public boolean connectToServer(String ip, Color color) {
 		//TODO set player color
 		if(running) {
-			return;
+			return false;
 		}
 		try {
-			clientSocket = new Socket(ip, PORT);
+			
+			try {
+				clientSocket = new Socket(ip, PORT);
+			} catch (ConnectException e1) {
+				clientSocket = null;
+				return false;
+			}
+			
+			
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			running = true;
 		} catch (IOException e) {
-			// TODO make exit gracefully
 			e.printStackTrace();
-			System.exit(-1);
+			controller.returnToJoinMenu();
 		}
+		
+		return true;
 	}
 	
 	/**
@@ -60,10 +74,10 @@ public class ClientModel {
 			in = null;
 			out = null;
 			clientSocket = null;
+			running = false;
 		} catch (IOException e) {
-			// TODO make exit gracefully
 			e.printStackTrace();
-			System.exit(-1);
+			controller.returnToJoinMenu();
 		}
 	}
 	
@@ -100,8 +114,16 @@ public class ClientModel {
 	 * @return
 	 */
 	public String requestRenderData() {
-		//TODO watch for "DEAD" prepended to data string
-		return sendMessage("GRD");
+		String response = sendMessage("GRD");
+		
+		if(response.length() >= 4) {
+			if(response.substring(0, 4).equals("DEAD")) {
+				response = response.substring(4);
+				controller.returnToJoinMenu();
+			}
+		}
+		
+		return response;
 	}
 	
 	private synchronized String sendMessage(String message) {
@@ -113,10 +135,17 @@ public class ClientModel {
 		out.println(message);
 		String response = "";
 		try {
-			response = in.readLine();
+			
+			try {
+				response = in.readLine();
+			} catch (SocketException e1) {
+				controller.returnToJoinMenu();
+				
+			}
+			
 		} catch (IOException e) {
-			// TODO make exit gracefully
 			e.printStackTrace();
+			controller.returnToJoinMenu();
 		}
 		
 		System.out.println("Recieved response: " + response);
@@ -129,9 +158,12 @@ public class ClientModel {
 	 * @param args
 	 * @throws UnknownHostException 
 	 */
-	public static void main(String[] args) throws UnknownHostException {
+	public static void main(String[] args) {
 		ClientModel clientTest = new ClientModel();
-		clientTest.connectToServer("127.0.0.1", Color.black);
+		if(!clientTest.connectToServer("127.0.0.1", Color.black)) {
+			System.out.println("Connection failed");
+			return;
+		}
 		
 		clientTest.mouseClicked(400, 350);
 		clientTest.keyPressed("UP");
@@ -139,6 +171,10 @@ public class ClientModel {
 		clientTest.sendMessage("Testing 1 ... 2 ... 3");
 		
 		clientTest.endConnection();
+	}
+
+	public void addController(Controller controller) {
+		this.controller = controller;
 	}
 	
 }

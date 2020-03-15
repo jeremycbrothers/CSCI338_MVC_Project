@@ -98,4 +98,8 @@ public abstract class GameObject implements Tickable{
 		return data;
 	}
 	
+	public void setColor(int rgb) {
+		color = new Color(rgb);
+	}
+	
 }

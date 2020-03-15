@@ -6,16 +6,27 @@ public class Controller {
 	private View view;
 	
 	private JoinButtonListener joinButtonListener;
+	private KeyboardReader keyReader;
+	private MouseReader mouseReader;
 	
 	public Controller(ClientModel model, View view) {
-		// TODO Auto-generated constructor stub
 		this.model = model;
 		this.view = view;
 		joinButtonListener = new JoinButtonListener(view, model);
+		keyReader = new KeyboardReader(model);
+		mouseReader = new MouseReader(model);
 	}
 	
 	public JoinButtonListener getJoinButtonListener() {
 		return joinButtonListener;
+	}
+	
+	public KeyboardReader getKeyReader() {
+		return keyReader;
+	}
+	
+	public MouseReader getMouseReader() {
+		return mouseReader;
 	}
 	
 	public void returnToJoinMenu() {

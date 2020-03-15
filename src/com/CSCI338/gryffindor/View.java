@@ -10,15 +10,10 @@ public class View extends JFrame{
 	
 	public static final Dimension DIMENSIONS = new Dimension(800, 600);
 	
-	private ClientModel model;
-	private Controller controller;
-	
 	private JoinMenu joinMenu;
 	private Display display;
 
 	public View(ClientModel model) {
-		// TODO Auto-generated constructor stub
-		this.model = model;
 		joinMenu = new JoinMenu();
 		display = new Display(model);
 		
@@ -31,8 +26,6 @@ public class View extends JFrame{
 	}
 
 	public void registerListener(Controller controller) {
-		// TODO Plug controller into appropriate GUI components
-		this.controller = controller;
 		joinMenu.registerListener(controller);
 		display.registerListener(controller);
 	}

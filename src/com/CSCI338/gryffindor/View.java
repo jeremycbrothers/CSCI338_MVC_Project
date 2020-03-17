@@ -39,11 +39,11 @@ public class View extends JFrame{
 	}
 	
 	public void switchToJoinMenu() {
-		display.stopThread();
 		joinMenu.setFeedbackText(null);
 		getContentPane().removeAll();
 		getContentPane().add(joinMenu);
 		pack();
+		display.stopThread();
 	}
 
 }

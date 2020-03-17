@@ -121,7 +121,7 @@ public class Display extends Canvas implements Runnable{
 			rgb = Integer.parseInt(gOData[3]);
 			
 			g.setColor(new Color(rgb));
-			g.fillOval(x + radius, y + radius, 2 * radius, 2 * radius);
+			g.fillOval(x - radius, y - radius, 2 * radius, 2 * radius);
 			
 		}
 	}

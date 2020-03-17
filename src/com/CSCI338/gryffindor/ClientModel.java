@@ -139,7 +139,8 @@ public class ClientModel {
 		if(!running)
 			return "";
 		
-		System.out.println("Sending message: " + message);
+		if(!message.equals("GRD"))//its too spammy
+			System.out.println("Sending message: " + message);
 		
 		out.println(message);
 		String response = "";
@@ -157,7 +158,8 @@ public class ClientModel {
 			controller.returnToJoinMenu();
 		}
 		
-		System.out.println("Recieved response: " + response);
+		if(!message.equals("GRD"))//its too spammy
+			System.out.println("Recieved response: " + response);
 		
 		return response;
 	}

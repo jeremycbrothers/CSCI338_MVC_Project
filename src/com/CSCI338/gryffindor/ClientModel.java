@@ -30,7 +30,6 @@ public class ClientModel {
 	 * @return true if connection successful
 	 */
 	public boolean connectToServer(String ip, Color color) {
-		//TODO set player color
 		if(running) {
 			return false;
 		}

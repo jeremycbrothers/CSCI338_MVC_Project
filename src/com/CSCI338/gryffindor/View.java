@@ -26,6 +26,7 @@ public class View extends JFrame{
 	}
 
 	public void registerListener(Controller controller) {
+		this.addWindowListener(controller.getExitListener());
 		joinMenu.registerListener(controller);
 		display.registerListener(controller);
 	}

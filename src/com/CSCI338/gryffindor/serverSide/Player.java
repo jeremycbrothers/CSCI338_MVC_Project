@@ -34,19 +34,19 @@ public class Player extends GameObject{
 		ServerMain.myPrint("Mouse clicked at (" + mx + " , " + my + ")");
 		ServerMain.myPrint("Player is at     (" + x + " , " + y + ")");
 		int xDiff = mx - x;
-		int yDiff = my - y;
-		//TODO fix bug with angle, currently wrong angle
+		int yDiff = y - my;
+		//TODO fix bug with angle, currently not exactly the right angle, but close enough
 		//Angle is in radians
 		double angle = Math.atan(yDiff / xDiff);
 		
-		if(xDiff < 0) {
+		if(xDiff < 0) {//Otherwise player always shoots right
 			angle += Math.PI;
 		}
 		
 		int xVel = (int) (Projectile.MAXVELOCITY * Math.cos(angle));
-		int yVel = (int) (Projectile.MAXVELOCITY * Math.sin(angle));
+		int yVel = (int) (Projectile.MAXVELOCITY * Math.sin(-angle));
 		
-		ServerMain.myPrint("Angle is: " + angle + ", xVel is: " + xVel + ", yVel is: " + yVel);
+		ServerMain.myPrint("Angle is: " + angle + ", xDiff is: " + xDiff + ", yDiff is: " + yDiff);
 		
 		shootProjectile(x, y, xVel, yVel);
 	}

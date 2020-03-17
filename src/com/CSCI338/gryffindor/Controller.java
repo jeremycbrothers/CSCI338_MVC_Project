@@ -8,6 +8,7 @@ public class Controller {
 	private JoinButtonListener joinButtonListener;
 	private KeyboardReader keyReader;
 	private MouseReader mouseReader;
+	private ExitListener exitListener;
 	
 	public Controller(ClientModel model, View view) {
 		this.model = model;
@@ -15,6 +16,7 @@ public class Controller {
 		joinButtonListener = new JoinButtonListener(view, model);
 		keyReader = new KeyboardReader(model);
 		mouseReader = new MouseReader(model);
+		exitListener = new ExitListener(this);
 	}
 	
 	public JoinButtonListener getJoinButtonListener() {
@@ -27,6 +29,10 @@ public class Controller {
 	
 	public MouseReader getMouseReader() {
 		return mouseReader;
+	}
+	
+	public ExitListener getExitListener() {
+		return exitListener;
 	}
 	
 	public void returnToJoinMenu() {
